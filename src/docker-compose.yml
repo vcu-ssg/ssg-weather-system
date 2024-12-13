@@ -8,17 +8,18 @@ services:
     ports:
       - "9123:9123"  # Map container port 9123
     restart: unless-stopped
-    volumes:
-      - ./config:/app/config  # Mount the configuration directory for Wunderground Exporter
-
+  
   prometheus:
-    image: prom/prometheus:latest
+    build:
+      context: .
+      dockerfile: prometheus.dockerfile  # Use the custom Dockerfile
     container_name: prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro  # Main Prometheus configuration
-      - ./rules:/etc/prometheus/rules:ro                   # Directory for alerting rules
+      - prometheus_data:/etc/prometheus  # Volume for runtime data
     ports:
       - "9090:9090"  # Prometheus UI
+    depends_on:
+      - wunderground_exporter
     restart: unless-stopped
 
   grafana:
@@ -27,15 +28,15 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin                      # Admin username
       - GF_SECURITY_ADMIN_PASSWORD=admin                  # Admin password
+      - GF_SERVER_HTTP_PORT=3010  # Explicitly set Grafana HTTP port
     volumes:
-      - ./provisioning:/etc/grafana/provisioning          # Grafana provisioning configuration
-      - ./dashboards:/etc/grafana/dashboards              # Grafana dashboards directory
       - grafana_data:/var/lib/grafana                     # Persistent data storage
     ports:
-      - "3000:3000"  # Grafana UI
+      - "3010:3010"  # Grafana UI
     depends_on:
       - prometheus
     restart: unless-stopped
 
 volumes:
   grafana_data:
+  prometheus_data:
