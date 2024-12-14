@@ -1,0 +1,19 @@
+
+services:
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin                      # Admin username
+      - GF_SECURITY_ADMIN_PASSWORD=admin                  # Admin password
+      - GF_SERVER_HTTP_PORT=3010  # Explicitly set Grafana HTTP port
+      - GF_INSTALL_PLUGINS=marcusolsson-dynamictext-panel,grafana-clock-panel
+    volumes:
+      - grafana_data:/var/lib/grafana                     # Persistent data storage
+    ports:
+      - "3010:3010"  # Grafana UI
+    restart: unless-stopped
+
+volumes:
+  grafana_data:
