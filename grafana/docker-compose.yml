@@ -14,6 +14,12 @@ services:
     ports:
       - "3010:3010"  # Grafana UI
     restart: unless-stopped
+    networks:
+      - monitoring  # Attach to the shared network
 
+networks:
+  monitoring:
+    external: true  # Use the existing shared network
+    
 volumes:
   grafana_data:

@@ -1,4 +1,3 @@
-
 services:
   wunderground_exporter:
     build:
@@ -8,6 +7,8 @@ services:
     ports:
       - "9123:9123"  # Map container port 9123
     restart: unless-stopped
+    networks:
+      - monitoring  # Connect to the shared network
   
   prometheus:
     build:
@@ -21,7 +22,13 @@ services:
     depends_on:
       - wunderground_exporter
     restart: unless-stopped
-
+    networks:
+      - monitoring  # Connect to the shared network
 
 volumes:
   prometheus_data:
+
+networks:
+  monitoring:
+    name: monitoring  # Ensure this name is consistent across files
+    driver: bridge
