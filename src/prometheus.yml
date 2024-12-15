@@ -3,5 +3,15 @@ global:
 
 scrape_configs:
   - job_name: 'wunderground_exporter'
+    scrape_interval: 15s
     static_configs:
       - targets: ['wunderground_exporter:9123']
+  - job_name: "home assistant"
+    scrape_interval: 60s
+    metrics_path: "/api/prometheus"
+    scheme: http
+    http_headers:
+      Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI0NzM3MDk4YzgwZmI0YjUwYmMwZGE5NjFkNmZiNDFhYyIsImlhdCI6MTczNDIxMTIxOCwiZXhwIjoyMDQ5NTcxMjE4fQ.Agndlh7_qJp4SpzUA2hLOe2dFLidDqCCOLGZ2zHgr_E"
+    static_configs:
+      - targets: ['192.168.100.203:8123']
+    

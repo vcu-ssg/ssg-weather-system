@@ -22,21 +22,6 @@ services:
       - wunderground_exporter
     restart: unless-stopped
 
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin                      # Admin username
-      - GF_SECURITY_ADMIN_PASSWORD=admin                  # Admin password
-      - GF_SERVER_HTTP_PORT=3010  # Explicitly set Grafana HTTP port
-    volumes:
-      - grafana_data:/var/lib/grafana                     # Persistent data storage
-    ports:
-      - "3010:3010"  # Grafana UI
-    depends_on:
-      - prometheus
-    restart: unless-stopped
 
 volumes:
-  grafana_data:
   prometheus_data:
